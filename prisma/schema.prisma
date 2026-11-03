@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Task status
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  COMPLETED
+}
+
+// Task priority
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+// Project member roles
+enum MemberRole {
+  ADMIN
+  MEMBER
+}
+
+// 1. USER MODEL
+model User {
+  id       String @id @default(cuid())
+  name     String
+  email    String @unique
+  password String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Projects owned by this user
+  ownedProjects Project[] @relation("ProjectOwner")
+
+  // Projects where this user is a member
+  memberships ProjectMember[]
+
+  // Tasks assigned to this user
+  assignedTasks Task[] @relation("TaskAssignee")
+
+  // Tasks created by this user
+  createdTasks Task[] @relation("TaskCreator")
+
+  @@map("users")
+}
+
+// 2. PROJECT MODEL
+model Project {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+
+  ownerId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Project owner
+  owner User @relation("ProjectOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+
+  // Project members
+  members ProjectMember[]
+
+  // Tasks belonging to this project
+  tasks Task[]
+
+  @@index([ownerId])
+  @@map("projects")
+}
+
+// 3. PROJECT MEMBER MODEL
+model ProjectMember {
+  id        String     @id @default(cuid())
+  projectId String
+  userId    String
+  role      MemberRole @default(MEMBER)
+
+  joinedAt DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // A user cannot join the same project twice
+  @@unique([projectId, userId])
+  @@index([userId])
+  @@map("project_members")
+}
+
+// 4. TASK MODEL
+model Task {
+  id          String  @id @default(cuid())
+  title       String
+  description String?
+
+  status   TaskStatus   @default(TODO)
+  priority TaskPriority @default(MEDIUM)
+
+  projectId    String
+  assignedToId String?
+  createdById  String
+
+  dueDate   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // Task belongs to a project
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  // User responsible for the task
+  assignedTo User? @relation("TaskAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
+
+  // User who created the task
+  createdBy User @relation("TaskCreator", fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@index([projectId])
+  @@index([assignedToId])
+  @@index([createdById])
+  @@index([projectId, status])
+  @@map("tasks")
+}

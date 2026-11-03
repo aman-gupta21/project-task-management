@@ -1,11 +1,11 @@
 {
   "info": {
-    "_postman_id": "76971e2c-cb38-47e2-8dd8-6a7e58372648",
-    "name": "My Collection",
+    "_postman_id": "bf119237-86c1-4e96-8687-c70b5970686d",
+    "name": "My Collection Copy",
     "description": "### Welcome to Postman! This is your first collection.\n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests  \n• Test your API in real-world scenarios  \n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "49534841",
-    "_collection_link": "https://go.postman.co/collection/49534841-76971e2c-cb38-47e2-8dd8-6a7e58372648?source=collection_link"
+    "_collection_link": "https://go.postman.co/collection/49534841-bf119237-86c1-4e96-8687-c70b5970686d?source=collection_link"
   },
   "item": [
     {
@@ -59,7 +59,7 @@
           }
         },
         "url": {
-          "raw": "{{baseUrl}}/api/auth/register",
+          "raw": "http://localhost:5000/api/auth/register",
           "protocol": "http",
           "host": [
             "localhost"
@@ -78,6 +78,9 @@
     {
       "name": "http://localhost:5000/api/auth/register",
       "request": {
+        "auth": {
+          "type": "noauth"
+        },
         "method": "POST",
         "header": [],
         "body": {
@@ -91,11 +94,9 @@
         },
         "url": {
           "raw": "{{baseUrl}}/api/auth/register",
-          "protocol": "http",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "auth",
@@ -108,6 +109,9 @@
     {
       "name": "http://localhost:5000/api/auth/register",
       "request": {
+        "auth": {
+          "type": "noauth"
+        },
         "method": "POST",
         "header": [],
         "body": {
@@ -121,11 +125,9 @@
         },
         "url": {
           "raw": "{{baseUrl}}/api/auth/register",
-          "protocol": "http",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "auth",
@@ -143,28 +145,20 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.test(\"Login successful\", function () {",
-              "    pm.response.to.have.status(200);",
-              "",
-              "    const response = pm.response.json();",
-              "",
-              "    pm.expect(response.success).to.eql(true);",
-              "",
-              "    pm.collectionVariables.set(",
-              "        \"token\",",
-              "        response.data.token",
-              "    );",
-              "});"
+              "pm.test(\"Login successful\", function () {\n    pm.response.to.have.status(200);\n    const response = pm.response.json();\n    pm.expect(response.success).to.eql(true);\n    pm.collectionVariables.set(\"token\", response.data.token);\n});"
             ]
           }
         }
       ],
       "request": {
+        "auth": {
+          "type": "noauth"
+        },
         "method": "POST",
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"email\": \"amangupta@example.com\",\r\n  \"password\": \"Aman@1234567\"\r\n}",
+          "raw": "{\r\n  \"email\": \"aman12@example.com\",\r\n  \"password\": \"Aman@1234565\"\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -173,11 +167,9 @@
         },
         "url": {
           "raw": "{{baseUrl}}/api/auth/login",
-          "protocol": "http",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "auth",
@@ -189,17 +181,18 @@
     },
     {
       "name": "http://localhost:5000/api/projects",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Project created successfully\", function () {\n    pm.response.to.have.status(201);\n    const response = pm.response.json();\n    pm.collectionVariables.set(\"projectId\", response.data.id);\n});"
+            ]
+          }
+        }
+      ],
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{token}}",
-              "type": "string"
-            }
-          ]
-        },
         "method": "POST",
         "header": [],
         "body": {
@@ -213,11 +206,9 @@
         },
         "url": {
           "raw": "{{baseUrl}}/api/projects",
-          "protocol": "http",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "projects"
@@ -229,16 +220,6 @@
     {
       "name": "http://localhost:5000/api/projects/cmw0cgz8l000298u4fgj75tz9/members",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{token}}",
-              "type": "string"
-            }
-          ]
-        },
         "method": "POST",
         "header": [],
         "body": {
@@ -251,16 +232,14 @@
           }
         },
         "url": {
-          "raw": "{{baseUrl}}/api/projects/cmw0cgz8l000298u4fgj75tz9/members",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/api/projects/{{projectId}}/members",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "projects",
-            "cmw0cgz8l000298u4fgj75tz9",
+            "{{projectId}}",
             "members"
           ]
         }
@@ -270,29 +249,17 @@
     {
       "name": "http://localhost:5000/api/projects/cmw0cgz8l000298u4fgj75tz9/members",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{token}}",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/projects/cmw0cgz8l000298u4fgj75tz9/members",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/api/projects/{{projectId}}/members",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "projects",
-            "cmw0cgz8l000298u4fgj75tz9",
+            "{{projectId}}",
             "members"
           ]
         }
@@ -301,17 +268,18 @@
     },
     {
       "name": "New Request",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Task created successfully\", function () {\n    pm.response.to.have.status(201);\n    const response = pm.response.json();\n    pm.collectionVariables.set(\"taskId\", response.data.id);\n});"
+            ]
+          }
+        }
+      ],
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{token}}",
-              "type": "string"
-            }
-          ]
-        },
         "method": "POST",
         "header": [],
         "body": {
@@ -324,17 +292,15 @@
           }
         },
         "url": {
-          "raw": "{{baseUrl}}/api/tasks/projects/cmw0cgz8l000298u4fgj75tz9/tasks",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/api/tasks/projects/{{projectId}}/tasks",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "tasks",
             "projects",
-            "cmw0cgz8l000298u4fgj75tz9",
+            "{{projectId}}",
             "tasks"
           ]
         }
@@ -344,29 +310,17 @@
     {
       "name": "http://localhost:5000/api/projects/cmw0cgz8l000298u4fgj75tz9/members",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{token}}",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/projects/cmw0cgz8l000298u4fgj75tz9/members",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/api/projects/{{projectId}}/members",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "projects",
-            "cmw0cgz8l000298u4fgj75tz9",
+            "{{projectId}}",
             "members"
           ]
         }
@@ -376,16 +330,6 @@
     {
       "name": "http://localhost:5000/api/projects/cmw0cgz8l000298u4fgj75tz9/members",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{token}}",
-              "type": "string"
-            }
-          ]
-        },
         "method": "POST",
         "header": [],
         "body": {
@@ -398,16 +342,14 @@
           }
         },
         "url": {
-          "raw": "{{baseUrl}}/api/projects/cmw0cgz8l000298u4fgj75tz9/members",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/api/projects/{{projectId}}/members",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "projects",
-            "cmw0cgz8l000298u4fgj75tz9",
+            "{{projectId}}",
             "members"
           ]
         }
@@ -417,29 +359,17 @@
     {
       "name": "http://localhost:5000/api/projects/cmw0cgz8l000298u4fgj75tz9/members",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{token}}",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/projects/cmw0cgz8l000298u4fgj75tz9/members",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/api/projects/{{projectId}}/members",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "projects",
-            "cmw0cgz8l000298u4fgj75tz9",
+            "{{projectId}}",
             "members"
           ]
         }
@@ -449,30 +379,18 @@
     {
       "name": "http://localhost:5000/api/tasks/projects/cmw0cgz8l000298u4fgj75tz9/tasks",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{token}}",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/tasks/projects/cmw0cgz8l000298u4fgj75tz9/tasks",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/api/tasks/projects/{{projectId}}/tasks",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "tasks",
             "projects",
-            "cmw0cgz8l000298u4fgj75tz9",
+            "{{projectId}}",
             "tasks"
           ]
         }
@@ -482,29 +400,17 @@
     {
       "name": "http://localhost:5000/api/tasks/cmw0da0le000698u4hq4nywos",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{token}}",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/tasks/cmw0da0le000698u4hq4nywos",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/api/tasks/{{taskId}}",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "tasks",
-            "cmw0da0le000698u4hq4nywos"
+            "{{taskId}}"
           ]
         }
       },
@@ -513,16 +419,6 @@
     {
       "name": "http://localhost:5000/api/tasks/cmw0da0le000698u4hq4nywos",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{token}}",
-              "type": "string"
-            }
-          ]
-        },
         "method": "PUT",
         "header": [],
         "body": {
@@ -535,16 +431,14 @@
           }
         },
         "url": {
-          "raw": "{{baseUrl}}/api/tasks/cmw0da0le000698u4hq4nywos",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/api/tasks/{{taskId}}",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "tasks",
-            "cmw0da0le000698u4hq4nywos"
+            "{{taskId}}"
           ]
         }
       },
@@ -553,16 +447,6 @@
     {
       "name": "http://localhost:5000/api/tasks/cmw0da0le000698u4hq4nywos/status",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{token}}",
-              "type": "string"
-            }
-          ]
-        },
         "method": "PATCH",
         "header": [],
         "body": {
@@ -575,16 +459,14 @@
           }
         },
         "url": {
-          "raw": "{{baseUrl}}/api/tasks/cmw0da0le000698u4hq4nywos/status",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/api/tasks/{{taskId}}/status",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "tasks",
-            "cmw0da0le000698u4hq4nywos",
+            "{{taskId}}",
             "status"
           ]
         }
@@ -594,30 +476,18 @@
     {
       "name": "http://localhost:5000/api/tasks/projects/cmw0cgz8l000298u4fgj75tz9/tasks",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{token}}",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/tasks/projects/cmw0cgz8l000298u4fgj75tz9/tasks?status=IN_PROGRESS",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/api/tasks/projects/{{projectId}}/tasks?status=IN_PROGRESS",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "tasks",
             "projects",
-            "cmw0cgz8l000298u4fgj75tz9",
+            "{{projectId}}",
             "tasks"
           ],
           "query": [
@@ -633,30 +503,18 @@
     {
       "name": "http://localhost:5000/api/tasks/projects/cmw0cgz8l000298u4fgj75tz9/tasks",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{token}}",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/tasks/projects/cmw0cgz8l000298u4fgj75tz9/tasks?status=IN_PROGRESS",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/api/tasks/projects/{{projectId}}/tasks?status=IN_PROGRESS",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "tasks",
             "projects",
-            "cmw0cgz8l000298u4fgj75tz9",
+            "{{projectId}}",
             "tasks"
           ],
           "query": [
@@ -672,30 +530,18 @@
     {
       "name": "http://localhost:5000/api/tasks/projects/cmw0cgz8l000298u4fgj75tz9/tasks",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{token}}",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/tasks/projects/cmw0cgz8l000298u4fgj75tz9/tasks?priority=HIGH",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/api/tasks/projects/{{projectId}}/tasks?priority=HIGH",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "tasks",
             "projects",
-            "cmw0cgz8l000298u4fgj75tz9",
+            "{{projectId}}",
             "tasks"
           ],
           "query": [
@@ -711,30 +557,18 @@
     {
       "name": "http://localhost:5000/api/tasks/projects/cmw0cgz8l000298u4fgj75tz9/tasks",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{token}}",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/tasks/projects/cmw0cgz8l000298u4fgj75tz9/tasks?assignedToId=cmw0cczcy000198u4hlt007qi",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/api/tasks/projects/{{projectId}}/tasks?assignedToId=cmw0cczcy000198u4hlt007qi",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "tasks",
             "projects",
-            "cmw0cgz8l000298u4fgj75tz9",
+            "{{projectId}}",
             "tasks"
           ],
           "query": [
@@ -750,30 +584,18 @@
     {
       "name": "http://localhost:5000/api/tasks/projects/cmw0cgz8l000298u4fgj75tz9/tasks",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{token}}",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/tasks/projects/cmw0cgz8l000298u4fgj75tz9/tasks?status=TODO&priority=HIGH&page=1&limit=5",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/api/tasks/projects/{{projectId}}/tasks?status=TODO&priority=HIGH&page=1&limit=5",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "tasks",
             "projects",
-            "cmw0cgz8l000298u4fgj75tz9",
+            "{{projectId}}",
             "tasks"
           ],
           "query": [
@@ -801,29 +623,17 @@
     {
       "name": "http://localhost:5000/api/tasks/cmw0da0le000698u4hq4nywos",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{token}}",
-              "type": "string"
-            }
-          ]
-        },
         "method": "DELETE",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/tasks/cmw0da0le000698u4hq4nywos",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/api/tasks/{{taskId}}",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "tasks",
-            "cmw0da0le000698u4hq4nywos"
+            "{{taskId}}"
           ]
         }
       },
@@ -832,25 +642,13 @@
     {
       "name": "http://localhost:5000/api/dashboard/summary",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{token}}",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
         "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/dashboard/summary",
-          "protocol": "http",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "dashboard",
@@ -863,30 +661,18 @@
     {
       "name": "http://localhost:5000/api/dashboard/projects/cmw0cgz8l000298u4fgj75tz9/summary",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{token}}",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/dashboard/projects/cmw0cgz8l000298u4fgj75tz9/summary",
-          "protocol": "http",
+          "raw": "{{baseUrl}}/api/dashboard/projects/{{projectId}}/summary",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "dashboard",
             "projects",
-            "cmw0cgz8l000298u4fgj75tz9",
+            "{{projectId}}",
             "summary"
           ]
         }
@@ -896,25 +682,13 @@
     {
       "name": " http://localhost:5000/api/dashboard/summary",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
         "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/dashboard/summary",
-          "protocol": "http",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "dashboard",
@@ -931,11 +705,9 @@
         "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/health",
-          "protocol": "http",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "health"
@@ -947,6 +719,9 @@
     {
       "name": "http://localhost:5000/api/auth/register",
       "request": {
+        "auth": {
+          "type": "noauth"
+        },
         "method": "POST",
         "header": [],
         "body": {
@@ -960,11 +735,9 @@
         },
         "url": {
           "raw": "{{baseUrl}}/api/auth/register",
-          "protocol": "http",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "auth",
@@ -977,9 +750,6 @@
     {
       "name": "http://localhost:5000/api/projects",
       "request": {
-        "auth": {
-          "type": "bearer"
-        },
         "method": "POST",
         "header": [],
         "body": {
@@ -993,11 +763,9 @@
         },
         "url": {
           "raw": "{{baseUrl}}/api/projects",
-          "protocol": "http",
           "host": [
-            "localhost"
+            "{{baseUrl}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "projects"
@@ -1007,10 +775,32 @@
       "response": []
     }
   ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
   "variable": [
     {
+      "key": "baseUrl",
+      "value": "http://localhost:5000"
+    },
+    {
       "key": "token",
-      "secret": true
+      "value": ""
+    },
+    {
+      "key": "projectId",
+      "value": ""
+    },
+    {
+      "key": "taskId",
+      "value": ""
     }
   ]
 }

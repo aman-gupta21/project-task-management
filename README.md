@@ -1,4 +1,3 @@
-
 # Project & Task Management REST API
 
 A RESTful backend application built using Node.js, Express.js, PostgreSQL and Prisma 7 to manage projects, team members and tasks.
